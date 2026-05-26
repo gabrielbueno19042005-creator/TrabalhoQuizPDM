@@ -171,7 +171,12 @@ class QuizService {
       String tema, int quantidade) async {
     try {
       // 1. Lê a chave do .env (Coloque sua chave da Groq lá)
-      final String apiKey = dotenv.env['_apiKey'] ?? '';
+      // Tenta pegar a chave real injetada pelo Codemagic. 
+// Se não existir (rodando local na sua máquina), ele usa o arquivo chave.env normal.
+            final String apiKey = String.fromEnvironment(
+              'GROQ_KEY', 
+              defaultValue: dotenv.env['_apiKey'] ?? '',
+            );
       if (apiKey.isEmpty) throw Exception('Chave API vazia');
 
       final uri = Uri.parse(_url);
